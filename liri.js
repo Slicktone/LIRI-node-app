@@ -1,39 +1,49 @@
-var keyGrab = require('./keys.js');
-var twitter = require('twitter');// process.argv[2];???
-// var spotify = require('spotify')// process.argv[3];
-// var movie = require('request') //process.argv[4];
+var keyGrab = require('./keys');
+var twitter = require('twitter');
+var spotify = require('spotify');
+var movie = require('request');
+var fs = require('fs');
 // var randomTxt = process.argv[5]; // not sure what to require
+var userInput = process.argv[2];
 
-function twitterApp (mytweets) {
-	// creating the app and pulling the keys
-	// can possibly refactor using the keyGrab variable???
+// Twitter Stuff
+if (userInput === "my-tweets") {
+	twitterApp();
+}
 
-var client = new Twitter({
-  consumer_key: '',
-  consumer_secret: '',
-  access_token_key: '',
-  access_token_secret: ''
+function twitterApp () {
+var client = new twitter({
+  consumer_key: keyGrab.consumer_key,
+  consumer_secret: keyGrab.consumer_secret,
+  access_token_key: keyGrab.access_token_key,
+  access_token_secret: keyGrab.access_token_secret
 });
 
-// using the param variable to search screen name
-var params = {screen_name: 'Slicktone310'};
+
+
+// creating the param variable to search screen name
+var params = {screen_name: 'slicktone310', count: 20};
 // using the client variable and get method with twitter api documentation
 client.get('favorites/list', params, function(error, tweets, response) {
   if (!error) {
     console.log(tweets);
   }
+  if (response.statusCode !== 200) {
+ 	console.log("Uh oh, logging statusCode: " + response.statusCode);
+ }
 });
 }
 
-function spotify(searchSong) {
 
-}
+// function spotify(searchSong) {
 
-function movie(movieLookup) {
+// }
 
-}
+// function movie(movieLookup) {
 
-function random(backStreetBois) {
+// }
 
-}
+// function random(backStreetBois) {
+
+// }
 

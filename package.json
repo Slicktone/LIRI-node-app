@@ -1,0 +1,25 @@
+{
+  "name": "lirinode",
+  "version": "1.0.0",
+  "description": "liri node packages",
+  "main": "\u001b[A\u001b[B\u001b[D\u001b[D\u001b[D\u001b[\u001b[C\u001b[C\u001b[C\u001b[\u001b[\u001b[C\u001b[C\u001bliri.js)",
+  "dependencies": {
+    "request": "^2.79.0",
+    "spotify": "^0.3.0",
+    "twitter": "^1.5.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Slicktone/LIRI-node-app.git"
+  },
+  "author": "Tony",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Slicktone/LIRI-node-app/issues"
+  },
+  "homepage": "https://github.com/Slicktone/LIRI-node-app#readme"
+}
