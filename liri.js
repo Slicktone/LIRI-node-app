@@ -98,15 +98,20 @@ var params = {
   tomatoes: true,
   plot: "short",
 }
-console.log(params);
-request.get(queryURL, function(error, response, body) {
-  if (response.statusCode !== 200) {
-    console.log("Information cannot be displayed because of: " + response.statusCode);
+
+request.get({uri: queryURL, qs: params }, function(error, data) {
+  if (error, data) {
+    return console.log("OMDB Error " + error);
   }
-  // console.log(body);
-  var result = JSON.parse(body);
-  console.log(result);
-})
+  if (data.statusCode !== 200) {
+    console.log("Information cannot be displayed because of: " + data.statusCode);
+  }
+  // console.log(params);
+   else {
+     var Movie = JSON.parse(body.data);
+     console.log(Movie);
+}
+});
 }
 
 // function random(backStreetBois) {
