@@ -1,9 +1,10 @@
 var keyGrab = require('./keys');
 var twitter = require('twitter');
 var spotify = require('spotify');
-var movie = require('request');
+var request = require('request');
 var fs = require('fs');
 // var randomTxt = process.argv[5]; // not sure what to require
+// var liriCommand = process.argv[2];
 var userInput = process.argv[2];
 
 
@@ -34,12 +35,21 @@ var client = new twitter({
 var params = {screen_name: 'slicktone310', count: 20};
 // using the client variable and get method with twitter api documentation
 client.get('favorites/list', params, function(error, tweets, response) {
-  if (!error) {
-    console.log(tweets);
+  if (error) {
+    return console.log("There was an error! " + error);
   }
   if (response.statusCode !== 200) {
- 	console.log("Uh oh, logging statusCode: " + response.statusCode);
+ 	console.log("Uh oh, logging twitter statusCode: " + response.statusCode);
+ } else {
+   var feedOutput = "";
+    for(var i = 0; i < tweets.length; i++) {
+      feedOutput += tweets[i].info + "\n";
+      feedOutput += tweets[i].text + "\n";
+      feedOutput += " - " + tweets[i].created_at + "\n";
+    }
+     console.log(feedOutput);
  }
+
 });
 }
 
@@ -66,11 +76,12 @@ function Spotify(songName) {
       //   console.log(JSON.stringify(data, null, 1));
       // }
       var songInfo = data.tracks.items[0];
-      console.log("Artist " + songInfo.artists[0].name);
-      console.log("Song Name: " + songInfo.name);
-      console.log("Preview Link " + songInfo.preview_url);
-      console.log("Album " + songInfo.album.name);
-  })
+      var songData = "Artist: " + songInfo.artists[0].name + "\n";
+        songData += "Name: " + songInfo.name + "\n";
+        songData += "Preview URL: " + songInfo.preview_url + "\n";
+        songData += "Album: " + songInfo.album.name + "\n";
+        console.log(songData);
+    });
 }
 
 function Movie(movieLookup) {
@@ -78,12 +89,22 @@ function Movie(movieLookup) {
     movieLookup = "Mr.Nobody";
   }
   var queryURL = "http://www.omdbapi.com/";
-
-request(queryURL, function(error, response, data) {
+// could not find all the required parameters listed in instructions
+var params = {
+  t: movieLookup,
+  type: "movie",
+  y: "year",
+  r: "json",
+  tomatoes: true,
+  plot: "short",
+}
+console.log(params);
+request.get(queryURL, function(error, response, body) {
   if (response.statusCode !== 200) {
     console.log("Information cannot be displayed because of: " + response.statusCode);
   }
-  var result = JSON.parse(data);
+  // console.log(body);
+  var result = JSON.parse(body);
   console.log(result);
 })
 }
