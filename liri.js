@@ -1,4 +1,4 @@
-var keyGrab = require('./keys');
+var keyGrab = require('./keys.js');
 var twitter = require('twitter');
 var spotify = require('spotify');
 var request = require('request');
@@ -21,24 +21,15 @@ if (userInput === "movie-this") {
   Movie();
 }
 
-function Twitter () {
-var client = new twitter({
-  consumer_key: keyGrab.consumer_key,
-  consumer_secret: keyGrab.consumer_secret,
-  access_token_key: keyGrab.access_token_key,
-  access_token_secret: keyGrab.access_token_secret
-});
-
-
 
 // creating the param variable to search screen name
 var params = {screen_name: 'slicktone310', count: 20};
 // using the client variable and get method with twitter api documentation
-client.get('favorites/list', params, function(error, tweets, response) {
+client.get('statuses/user_timeline', params, function(error, tweets, response) {
   if (error) {
     return console.log("There was an error! " + error);
   }
-  if (response.statusCode !== 200) {
+  else if (response.statusCode !== 200) {
  	console.log("Uh oh, logging twitter statusCode: " + response.statusCode);
  } else {
    var feedOutput = "";
@@ -51,38 +42,58 @@ client.get('favorites/list', params, function(error, tweets, response) {
  }
 
 });
-}
 
 
-function Spotify(songName) {
-// can't get anything except The Sign to show =/
-
-  if(songName === undefined) {
-    songName = "The Sign, Ace of Base";
+var Spotify = function(songName) {
+  
+  if (songName === undefined) {
+    songName = "What\"s my age again";
   }
 
-  var songQuery = {
-      type: 'track', 
-      query: songName, 
-      limit: 1
-  };
+  spotify.search({
+    type: "track",
+    query: songName
+  }, function(err, data) {
+    if (err) {
+      console.log("There's an error! Here!: " + err);
+      return;
+    }
 
-  spotify.search(songQuery, function(error, data) {
-      if (error) {
-        console.log("Darn! Theres an error: " + error);
-        return;
-       } 
-      //  else {
-      //   console.log(JSON.stringify(data, null, 1));
-      // }
-      var songInfo = data.tracks.items[0];
-      var songData = "Artist: " + songInfo.artists[0].name + "\n";
-        songData += "Name: " + songInfo.name + "\n";
-        songData += "Preview URL: " + songInfo.preview_url + "\n";
-        songData += "Album: " + songInfo.album.name + "\n";
-        console.log(songData);
-    });
-}
+    var songs = data.tracks.items;
+
+    for (var i = 0; i < songs.length; i++) {
+      console.log(i);
+      console.log("artist(s): " + songs[i].artists.map(getArtistNames));
+      console.log("song name: " + songs[i].name);
+      console.log("preview song: " + songs[i].preview_url);
+      console.log("album: " + songs[i].album.name);
+      console.log("========================================");
+    }
+  });
+};
+
+
+function Twitter () {
+  var client = new twitter({
+    consumer_key: keyGrab.twitterKeys.consumer_key,
+    consumer_secret: keyGrab.twitterKeys.consumer_secret,
+    access_token_key: keyGrab.twitterKeys.access_token_key,
+    access_token_secret: keyGrab.twitterKey.access_token_secret
+  });
+
+  var params = {
+    screen_name: "cnn"
+  };
+  client.get("statuses/user_timeline", params, function(error, tweets, response) {
+    if(!error) {
+      for (var i = 0; i < tweets.length; i++) {
+        console.log(tweets[i].created_at);
+        console.log("");
+        console.log(tweets[i].text);
+      }
+    }
+  });
+};
 
 function Movie(movieLookup) {
   if(!movieLookup) {
