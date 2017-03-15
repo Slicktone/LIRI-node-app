@@ -68,4 +68,7 @@ log.txt
 
 This file will write to the new User.js search.
 
-
+### TODO:
+       *      Finish Updating Movie Function
+       *      Get everything working!
+       *      Update README more
